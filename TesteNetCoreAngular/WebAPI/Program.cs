@@ -4,6 +4,7 @@ using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 // Add services to the container.
 
@@ -16,6 +17,16 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          //policy.WithOrigins("http://example.com", "http://www.contoso.com");
+                          policy.AllowAnyOrigin();
+                      });
+});
 
 var app = builder.Build();
 
@@ -30,7 +41,7 @@ if (app.Environment.IsDevelopment())
 
 //indica qual classe usar para instanciar
 
-
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
@@ -39,3 +50,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

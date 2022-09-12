@@ -93,6 +93,8 @@ namespace WebAPI.Controllers
         {
             try
             {
+                if (usuario.DataNascimento > DateTime.Now)
+                    throw new ApplicationException("A data de nascimento não pode ser maior do que o dia atual");
 
                 if (usuario.Id == 0)
                     await usuarioRepository.AddAsync(usuario.ToUsuario());
@@ -105,7 +107,9 @@ namespace WebAPI.Controllers
             {
                 var error = new ErrorModel();
                 error.Message = ex.Message;
-                return StatusCode(StatusCodes.Status500InternalServerError, error);
+                int statusCode = ex is ApplicationException? StatusCodes.Status400BadRequest : StatusCodes.Status500InternalServerError;
+
+                return StatusCode(statusCode, error);
             }
         }
 

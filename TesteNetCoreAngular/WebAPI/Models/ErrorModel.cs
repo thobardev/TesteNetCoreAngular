@@ -2,8 +2,7 @@
 {
     public class ErrorModel
     {
-        public int CodeError { get; set; }
-        public string MessageError { get; set; }
-        public bool HasError { get; set; }
+        public int Code { get; set; }
+        public string Message { get; set; }
     }
 }

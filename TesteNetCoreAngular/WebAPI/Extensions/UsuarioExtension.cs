@@ -13,6 +13,7 @@ namespace WebAPI.Extensions
                 Nome = usuario.Nome,
                 Sobrenome = usuario.Sobrenome,
                 DataNascimento = usuario.DataNascimento,
+                Email = usuario.Email,
                 Escolaridade = usuario?.Escolaridade?.Descricao,
                 EscolaridadeId = usuario.EscolaridadeId
             };

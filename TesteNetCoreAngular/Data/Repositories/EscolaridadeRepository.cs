@@ -1,4 +1,5 @@
-﻿using Data.Context;
+﻿using Data.Abstract;
+using Data.Context;
 using Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
-    public class EscolaridadeRepository
+    public class EscolaridadeRepository: IEscolaridadeRepository
     {
         DataContext context;
         public EscolaridadeRepository(DataContext context)

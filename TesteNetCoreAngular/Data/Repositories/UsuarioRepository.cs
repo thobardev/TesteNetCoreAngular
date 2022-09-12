@@ -99,5 +99,25 @@ namespace Data.Repositories
                 throw ex;
             }
         }
+
+        public void Add(Usuario usuario)
+        {
+            try
+            {
+                var usuarioDB = new Usuario();
+
+                usuarioDB.Nome = usuario.Nome;
+                usuarioDB.Sobrenome = usuario.Sobrenome;
+                usuarioDB.Email = usuario.Email;
+                usuarioDB.DataNascimento = usuario.DataNascimento;
+                usuarioDB.EscolaridadeId = usuario.EscolaridadeId;
+
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

@@ -3,52 +3,41 @@
 <h2>
   Usuários
 </h2>
-
-
-
-<table class="table">
+<div style="padding: 20px 0px 20px 0px; text-align: left;">
+  <button  class="btn btn-primary"  (click)="open(content)" >Adicionar Usuário</button>
+</div>
+<table class="table table-striped"  >
   <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-      <th scope="col">Operação</th>
-
-    </tr>
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col">Nome</th>
+    <th scope="col">Sobrenome</th>
+    <th scope="col">E-mail</th>
+    <th scope="col">Data Nascimento</th>
+    <th scope="col">Escolaridade</th>
+    <th scope="col">Operação</th>
+  </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td><a [routerLink]="" (click)="teste()" > <fa-icon [icon]="faPen"  style='font-size:16px'></fa-icon> </a></td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
+    <tr *ngFor="let usuario of usuarios; index as i">
+      <th scope="row">{{ usuario.id }}</th>
+      <td> {{ usuario.nome }} </td>
+      <td>{{ usuario.sobrenome  }}</td>
+      <td>{{ usuario.email  }}</td>
+      <td>{{ usuario.dataNascimento}}</td>
+      <td>{{ usuario.escolaridade  }}</td>
+      <td >
+        <div style="display: flex; ">
+          <a [routerLink]="" (click)="open(content, usuario)" > <fa-icon [icon]="faPen" placement="top" ngbTooltip="Editar" style='font-size:16px'></fa-icon> </a>
+          &nbsp; &nbsp;
+          <a [routerLink]="" (click)="open(content, usuario)" > <fa-icon [icon]="faTrashCan" placement="top" ngbTooltip="Excluir" style='font-size:16px'></fa-icon> </a>
+        </div>
+      </td>
     </tr>
   </tbody>
 </table>
-<br/>
-a
-<i class="fa-sharp fa-solid fa-house"></i>
-<i class='fas fa-bell' style='font-size:24px'></i>
-<i class="far fa-eye"></i>
-a
-<fa-icon [icon]="faCoffee"></fa-icon>
-<fa-icon [icon]="faPen"  style='font-size:24px'></fa-icon>
-<i class="fa-sharp fa-solid fa-house"></i>
-a
-<br/><br/>
+
+
 
 
 
@@ -60,27 +49,64 @@ a
 
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    <h4 class="modal-title" id="modal-basic-title">{{tituloModal}}</h4>
+    <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.dismiss('Cross click')"></button>
   </div>
   <div class="modal-body">
     <form>
       <div class="mb-3">
-        <label for="dateOfBirth">Date of birth</label>
-        <div class="input-group">
-          <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
-          <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
+        <div style="margin-bottom: 15px;">
+          <label for="nome">Nome</label>
+          <div class="input-group">
+            <input id="nome" [(ngModel)]="usuarioSelecionado.nome" class="form-control" placeholder="Primeiro Nome" name="nome">
+          </div>
         </div>
+        <div style="margin-bottom: 15px;">
+          <label for="sobrenome">Sobrenome</label>
+          <div class="input-group">
+            <input id="sobrenome" [(ngModel)]="usuarioSelecionado.sobrenome" class="form-control" placeholder="Sobrenome" name="sobrenome">
+          </div>
+        </div>
+        <div style="margin-bottom: 15px;">
+          <label for="email">E-mail</label>
+          <div class="input-group">
+            <input id="email" [(ngModel)]="usuarioSelecionado.email" class="form-control" placeholder="Primeiro Nome" name="email">
+          </div>
+        </div>
+        <div style="margin-bottom: 15px;">
+          <label for="escolaridade">Escolaridade</label>
+          <div class="input-group">
+            <select class="form-select" aria-label="Especialidade" [(ngModel)]="usuarioSelecionado.escolaridadeId" [ngModelOptions]="{standalone: true}">
+              <option *ngFor="let escolaridade of escolaridades" [value]="escolaridade.id">{{escolaridade.descricao}}</option>
+            </select>
+          </div>
+        </div>
+
+
+
+        <div style="margin-bottom: 15px;">
+          <label for="dataNascimento">Data Nascimento</label>
+          <div class="input-group">
+            <input id="dataNascimento" [(ngModel)]="usuarioSelecionado.dataNascimento" class="form-control" placeholder="00/00/0000" name="dataNascimento">
+          </div>
+        </div>
+        <div style="margin-bottom: 15px;">
+          <form class="row row-cols-sm-auto">
+            <div class="col-12">
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd"
+                       name="dp" [(ngModel)]="nascimento" ngbDatepicker #d="ngbDatepicker">
+                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+              </div>
+            </div>
+          </form>
+        </div>
+        
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Salvar</button>
   </div>
 </ng-template>
 
-<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button>
-
-<hr>
-
-<pre>{{ closeResult }}</pre>

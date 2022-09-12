@@ -1,12 +1,12 @@
 
 export class UsuarioModel
 {
-    Id: number = 0;
-    Nome: string = '';
-    Sobrenome: string = '';
-    Email: string = '';
-    DataNascimento: Date = new Date();
-    EscolaridadeId: number = 0;
-    EscoladidadeDescricao: string = '';
+    id: number = 0;
+    nome: string = '';
+    sobrenome: string = '';
+    email: string = '';
+    dataNascimento: Date = new Date();
+    escolaridadeId: number = 0;
+    escolaridade: string = '';
 
 }

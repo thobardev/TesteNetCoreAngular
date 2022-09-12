@@ -9,5 +9,7 @@ namespace Data.Abstract
         void Delete(int id);
         void Update(Usuario usuario);
 
+        void Add(Usuario usuario);
+
     }
 }

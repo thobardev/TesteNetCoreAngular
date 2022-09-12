@@ -1,7 +1,8 @@
 import { UsuarioModel } from "src/models/UsuarioModel";
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from "@angular/core";
-import { interval, take, lastValueFrom, firstValueFrom } from 'rxjs';
+import { interval, take, lastValueFrom, firstValueFrom, Observable } from 'rxjs';
+import { EscolaridadeModel } from "src/models/EscolaridadeModel";
 
 @Injectable({
     providedIn:"root"
@@ -9,64 +10,47 @@ import { interval, take, lastValueFrom, firstValueFrom } from 'rxjs';
 
 export class UsuarioService
 {
- 
+    httpOptions = { headers: new HttpHeaders({'Content-Type': 'application/json'}) };
+    baseUrl = 'https://localhost:7182/api/home';
     constructor(private httpCliente: HttpClient){};
 
-    async getUsuario(id: number) : Promise<UsuarioModel> 
+    getUsuario(id: number) : Observable<UsuarioModel> 
     {
-        const usuarioModel: UsuarioModel = new UsuarioModel();
-        try {
-
-           let response = await firstValueFrom(this.httpCliente.get<any>(`https://localhost:7182/api/home/${id}`));
-
-           alert(response.hasError);
-
-
-        } catch (error) {
-            
-        }
-
-        return usuarioModel;
+        return this.httpCliente.get<UsuarioModel>(`${this.baseUrl}/${id}`);
     }
 
-    getUsuarios() : UsuarioModel[]
+    getAllUsuarios() : Observable<UsuarioModel[]>
     {
-        let usuarios: UsuarioModel[] = [];
-        try {
-
-
-
-
-        } catch (error) {
-            
-        }
-
-        return usuarios;
+        return this.httpCliente.get<UsuarioModel[]>(`${this.baseUrl}`);
     }
 
 
     deleteUsuario(id: number)
     {
-        try {
-
-
-
-
-        } catch (error) {
-            
-        }
+        return this.httpCliente.delete<any>(`${this.baseUrl}/${id}`);
     }
 
-    updateUsuario(usuarioModel: UsuarioModel)
+    saveUsuario(usuarioModel: UsuarioModel)
     {
-        try {
+        const body = JSON.stringify(usuarioModel);
+        console.log(body);
 
+        return this.httpCliente.post<any>(`${this.baseUrl}`, body, this.httpOptions);
+    }
 
+    // updateUsuario(usuarioModel: UsuarioModel)
+    // {
+    //     return this.httpCliente.post<any>(`${this.baseUrl}`, usuarioModel);
+    // }
 
+    // addUsuario(usuarioModel: UsuarioModel)
+    // {
+    //     return this.httpCliente.post<any>(`${this.baseUrl}`, usuarioModel);
+    // }
 
-        } catch (error) {
-            
-        }
+    getEscolaridades()
+    {
+        return this.httpCliente.get<EscolaridadeModel[]>(`${this.baseUrl}/escolaridades`);
     }
 
 }

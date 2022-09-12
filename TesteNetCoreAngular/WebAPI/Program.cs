@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddTransient<IEscolaridadeRepository, EscolaridadeRepository>();
 
 
 builder.Services.AddCors(options =>
@@ -25,6 +26,7 @@ builder.Services.AddCors(options =>
                       {
                           //policy.WithOrigins("http://example.com", "http://www.contoso.com");
                           policy.AllowAnyOrigin();
+                          policy.AllowAnyHeader();
                       });
 });
 

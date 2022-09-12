@@ -26,14 +26,16 @@ namespace WebAPI.Controllers
         //}
 
         IUsuarioRepository usuarioRepository;
+        IEscolaridadeRepository escolaridadeRepository;
 
-        public HomeController(IUsuarioRepository usuarioRepository)
+        public HomeController(IUsuarioRepository usuarioRepository, IEscolaridadeRepository escolaridadeRepository)
         {
             this.usuarioRepository = usuarioRepository;
+            this.escolaridadeRepository = escolaridadeRepository;
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetUsuarios(int id)
+        public IActionResult GetUsuario(int id)
         {
             try
             {
@@ -45,8 +47,7 @@ namespace WebAPI.Controllers
             catch (Exception ex)
             {
                 var error = new ErrorModel();
-                error.HasError = true;
-                error.MessageError = ex.Message;
+                error.Message = ex.Message;
                 return StatusCode(StatusCodes.Status500InternalServerError, error);
             }
         }
@@ -65,8 +66,7 @@ namespace WebAPI.Controllers
             catch (Exception ex)
             {
                 var error = new ErrorModel();
-                error.HasError = true;
-                error.MessageError = ex.Message;
+                error.Message = ex.Message;
                 return StatusCode(StatusCodes.Status500InternalServerError, error);
             }
         }
@@ -82,28 +82,46 @@ namespace WebAPI.Controllers
             catch (Exception ex)
             {
                 var error = new ErrorModel();
-                error.HasError = true;
-                error.MessageError = ex.Message;
+                error.Message = ex.Message;
                 return StatusCode(StatusCodes.Status500InternalServerError, error);
             }
 
         }
 
         [HttpPost()]
-        public IActionResult Update(UsuarioModel usuario)
+        public IActionResult Save(UsuarioModel usuario)
         {
             ErrorModel errorModel = new ErrorModel();
             try
             {
-                usuarioRepository.Update(usuario.ToUsuario());
+                if (usuario.Id == 0)
+                    usuarioRepository.Add(usuario.ToUsuario());
+                else
+                    usuarioRepository.Update(usuario.ToUsuario());
 
                 return NoContent();
             }
             catch (Exception ex)
             {
                 var error = new ErrorModel();
-                error.HasError = true;
-                error.MessageError = ex.Message;
+                error.Message = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+            }
+
+        }
+
+        [HttpGet("escolaridades/")]
+        public IActionResult GetEscolaridades()
+        {
+            try
+            {
+                IEnumerable<Escolaridade> escolaridades = escolaridadeRepository.GetAll();
+                return Ok(escolaridades.ToEscolaridadeModelList());
+            }
+            catch (Exception ex)
+            {
+                var error = new ErrorModel();
+                error.Message = ex.Message;
                 return StatusCode(StatusCodes.Status500InternalServerError, error);
             }
 

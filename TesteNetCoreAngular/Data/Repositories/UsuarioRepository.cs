@@ -19,11 +19,11 @@ namespace Data.Repositories
             this.context = context;
         }
 
-        public Usuario Get(int id)
+        public async Task<Usuario> GetAsync(int id)
         {
             try
             {
-                var usuario = context.Usuarios.Include(u => u.Escolaridade).Where(e => e.Id == id).FirstOrDefault();
+                var usuario = await context.Usuarios.Include(u => u.Escolaridade).Where(e => e.Id == id).FirstOrDefaultAsync();
 
                 if (usuario != null)
                     return usuario;
@@ -37,11 +37,11 @@ namespace Data.Repositories
 
         }
 
-        public IEnumerable<Usuario> GetAll()
+        public async Task<IEnumerable<Usuario>> GetAllAsync()
         {
             try
             {
-                var usuarios = context.Usuarios.Include(u => u.Escolaridade).ToList();
+                var usuarios = await context.Usuarios.Include(u => u.Escolaridade).ToListAsync();
 
                 return usuarios;
             }
@@ -52,16 +52,16 @@ namespace Data.Repositories
 
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             try
             {
-                var usuario = context.Usuarios.Where(e => e.Id == id).FirstOrDefault();
+                var usuario = await context.Usuarios.Where(e => e.Id == id).FirstOrDefaultAsync();
 
                 if (usuario != null)
                 {
                     context.Usuarios.Remove(usuario);
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
                 }
                 else
                     throw new Exception("Usuário não encontrado.");
@@ -74,11 +74,11 @@ namespace Data.Repositories
             }
         }
 
-        public void Update(Usuario usuario)
+        public async Task UpdateAsync(Usuario usuario)
         {
             try
             {
-                var usuarioDB = context.Usuarios.Where(e => e.Id == usuario.Id).FirstOrDefault();
+                var usuarioDB = await context.Usuarios.Where(e => e.Id == usuario.Id).FirstOrDefaultAsync();
 
                 if (usuarioDB != null)
                 {
@@ -88,7 +88,7 @@ namespace Data.Repositories
                     usuarioDB.DataNascimento = usuario.DataNascimento;
                     usuarioDB.EscolaridadeId = usuario.EscolaridadeId;
 
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
                 }
                 else
                     throw new Exception("Usuário não encontrado.");
@@ -100,7 +100,7 @@ namespace Data.Repositories
             }
         }
 
-        public void Add(Usuario usuario)
+        public async Task AddAsync(Usuario usuario)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace Data.Repositories
                 usuarioDB.DataNascimento = usuario.DataNascimento;
                 usuarioDB.EscolaridadeId = usuario.EscolaridadeId;
                 context.Usuarios.Add(usuarioDB);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
             catch (Exception ex)
             {

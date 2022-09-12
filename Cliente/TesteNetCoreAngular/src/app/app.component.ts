@@ -25,11 +25,8 @@ export class AppComponent {
     tituloModal = 'Detalhes Usuário';
 
     usuarioSelecionado: UsuarioModel = new UsuarioModel();
-    //escolaridadeSelecionada: EscolaridadeModel = new EscolaridadeModel();
     escolaridadeSelecionadaId: number = 0;
-
     nascimento: NgbDateStruct = this.calendar.getToday();
-
 
 
     constructor(private modalService: NgbModal, private usuarioService: UsuarioService, private calendar: NgbCalendar) {
@@ -126,8 +123,7 @@ export class AppComponent {
             error: (data) =>{
                 let message = data.error.message ? data.error.message : data.message;
                 console.log(data);
-
-                alert('fora service: ' + message);
+                this.ExibeErro(message);
             }
         });
     }
@@ -152,7 +148,7 @@ export class AppComponent {
                 let message = data.error.message ? data.error.message : data.message;
                 console.log(data);
 
-                alert('fora service: ' + message);
+                this.ExibeErro(message);
             }
         });
     }
@@ -168,12 +164,7 @@ export class AppComponent {
 
         if(erro.length > 0)
         {
-            Swal.fire({
-              title: 'Atenção',
-              text: erro,
-              icon: 'warning',
-              confirmButtonText: 'OK'
-            });
+            this.ExibeErro(erro);
             return false;
         }
 
@@ -208,19 +199,9 @@ export class AppComponent {
                     let message = data.error.message ? data.error.message : data.message;
                     console.log(data);
     
-                  Swal.fire(
-                    'Erro ao excluir!',
-                    `Não foi possível excluir: ${message}`,
-                    'error'
-                  );
+                    this.ExibeErro(`Não foi possível excluir: ${message}`);
                 }
             });
-
-          // Swal.fire(
-          //   'Deleted!',
-          //   'Your file has been deleted.',
-          //   'success'
-          // )
         }
       })
     }
@@ -231,6 +212,17 @@ export class AppComponent {
         title: 'Atenção',
         html: mensagem,
         icon: 'warning',
+        confirmButtonText: 'OK'
+      });
+    }
+
+    
+    ExibeErro(mensagem: string)
+    {
+      Swal.fire({
+        title: 'Atenção',
+        html: mensagem,
+        icon: 'error',
         confirmButtonText: 'OK'
       });
     }

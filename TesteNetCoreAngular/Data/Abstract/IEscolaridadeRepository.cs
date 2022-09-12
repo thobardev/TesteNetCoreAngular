@@ -9,7 +9,7 @@ namespace Data.Abstract
 {
     public interface IEscolaridadeRepository
     {
-        Escolaridade Get(int id);
-        IEnumerable<Escolaridade> GetAll();
+        Task<Escolaridade> GetAsync(int id);
+        Task<IEnumerable<Escolaridade>> GetAllAsync();
     }
 }

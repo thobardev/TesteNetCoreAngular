@@ -35,11 +35,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetUsuario(int id)
+        public async Task<IActionResult> GetUsuario(int id)
         {
             try
             {
-                var usuario = usuarioRepository.Get(id);
+                var usuario = await usuarioRepository.GetAsync(id);
                 var usuarioModel = usuario.ToUsuarioModel();
 
                 return Ok(usuarioModel);
@@ -54,11 +54,11 @@ namespace WebAPI.Controllers
 
 
         [HttpGet(Name = "GetHome")]
-        public IActionResult GetUsuarios()
+        public async Task<IActionResult> GetUsuarios()
         {
             try
             {
-                var usuarios = usuarioRepository.GetAll();
+                var usuarios = await usuarioRepository.GetAllAsync();
                 IEnumerable<UsuarioModel> usuariosModel = usuarios.ToUsuarioModelList();
 
                 return Ok(usuariosModel);
@@ -72,11 +72,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                usuarioRepository.Delete(id);
+                await usuarioRepository.DeleteAsync(id);
                 return NoContent();
             }
             catch (Exception ex)
@@ -89,15 +89,15 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost()]
-        public IActionResult Save(UsuarioModel usuario)
+        public async Task<IActionResult> Save(UsuarioModel usuario)
         {
             try
             {
 
                 if (usuario.Id == 0)
-                    usuarioRepository.Add(usuario.ToUsuario());
+                    await usuarioRepository.AddAsync(usuario.ToUsuario());
                 else
-                    usuarioRepository.Update(usuario.ToUsuario());
+                    await usuarioRepository.UpdateAsync(usuario.ToUsuario());
 
                 return NoContent();
             }
@@ -110,11 +110,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("escolaridades/")]
-        public IActionResult GetEscolaridades()
+        public async Task<IActionResult> GetEscolaridades()
         {
             try
             {
-                IEnumerable<Escolaridade> escolaridades = escolaridadeRepository.GetAll();
+                IEnumerable<Escolaridade> escolaridades = await escolaridadeRepository.GetAllAsync();
                 return Ok(escolaridades.ToEscolaridadeModelList());
             }
             catch (Exception ex)

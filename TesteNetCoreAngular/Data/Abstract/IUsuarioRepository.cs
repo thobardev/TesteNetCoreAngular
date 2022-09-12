@@ -4,12 +4,12 @@ namespace Data.Abstract
 {
     public interface IUsuarioRepository
     {
-        Usuario Get(int id);
-        IEnumerable<Usuario> GetAll();
-        void Delete(int id);
-        void Update(Usuario usuario);
+        Task<Usuario> GetAsync(int id);
+        Task<IEnumerable<Usuario>> GetAllAsync();
+        Task DeleteAsync(int id);
+        Task UpdateAsync(Usuario usuario);
 
-        void Add(Usuario usuario);
+        Task AddAsync(Usuario usuario);
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Data.Abstract;
 using Data.Context;
 using Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +19,11 @@ namespace Data.Repositories
         }
 
 
-        public Escolaridade Get(int id)
+        public async Task<Escolaridade> GetAsync(int id)
         {
             try
             {
-                var escolaridade = context.Escolaridades.Where(e => e.Id == id).FirstOrDefault();
+                var escolaridade = await context.Escolaridades.Where(e => e.Id == id).FirstOrDefaultAsync();
 
                 if (escolaridade != null)
                     return escolaridade;
@@ -36,11 +37,11 @@ namespace Data.Repositories
 
         }
 
-        public IEnumerable<Escolaridade> GetAll()
+        public async Task<IEnumerable<Escolaridade>> GetAllAsync()
         {
             try
             {
-                var escolaridades = context.Escolaridades.ToList();
+                var escolaridades = await context.Escolaridades.ToListAsync();
 
                 return escolaridades;
             }

@@ -7,11 +7,11 @@ namespace WebAPI.Models
         public int Id { get; set; }
 
         [Required]
-        [StringLength(5, ErrorMessage = "Informe no máximo 100 caracteres")]
+        [StringLength(100, ErrorMessage = "Informe no máximo 100 caracteres")]
         public string Nome { get; set; }
 
         [Required]
-        [StringLength(5, ErrorMessage = "Informe no máximo 200 caracteres")]
+        [StringLength(200, ErrorMessage = "Informe no máximo 200 caracteres")]
         public string Sobrenome { get; set; }
 
         [Required]

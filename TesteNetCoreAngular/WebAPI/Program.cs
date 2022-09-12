@@ -27,6 +27,7 @@ builder.Services.AddCors(options =>
                           //policy.WithOrigins("http://example.com", "http://www.contoso.com");
                           policy.AllowAnyOrigin();
                           policy.AllowAnyHeader();
+                          policy.AllowAnyMethod();
                       });
 });
 

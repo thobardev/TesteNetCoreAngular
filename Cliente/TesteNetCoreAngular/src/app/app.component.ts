@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
-import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { faL, faPen } from '@fortawesome/free-solid-svg-icons';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { UsuarioService } from 'src/services/UsuariosService';
 import { UsuarioModel } from 'src/models/UsuarioModel';
@@ -9,6 +9,7 @@ import { NgTemplateOutlet } from '@angular/common';
 import { EscolaridadeModel } from 'src/models/EscolaridadeModel';
 import { TitleStrategy } from '@angular/router';
 import {NgbDateStruct, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-root',
@@ -66,11 +67,19 @@ export class AppComponent {
         this.nascimento = this.calendar.getToday();
       }
 
-      this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title',
+        // beforeDismiss: () => {
+          
+        //   return false;
+        // }
+      }).result.then((result) => {
+
+        // if(!this.UsuarioValido())
+        //   return;
 
         this.usuarioSelecionado.dataNascimento = new Date(this.nascimento.year, this.nascimento.month -1, this.nascimento.day);
         
-        console.log(this.usuarioSelecionado.dataNascimento);
+
         this.usuarioService.saveUsuario(this.usuarioSelecionado).subscribe(
           {
               complete: () => {
@@ -80,9 +89,18 @@ export class AppComponent {
               },
               error: (data) =>{
                   let message = data.error.message ? data.error.message : data.message;
-                  console.log(data);
-
-                 
+                  let erro = '';
+                  
+                  if(data.error.errors)
+                  {
+                      for(let p in data.error.errors)
+                      {
+                        erro += `${p}: ${data.error.errors[p][0]} <br/> `;
+                      }
+                        
+                      this.ExibeErroValidacao(erro);
+                  }
+                  
               }
           });
 
@@ -96,6 +114,8 @@ export class AppComponent {
    
     listaTodosUsuarios()
     {
+
+
         this.usuarioService.getAllUsuarios().subscribe(
         {
             complete: () => {
@@ -138,4 +158,81 @@ export class AppComponent {
     }
 
 
+    UsuarioValido(): boolean
+    {
+        let erro = '';
+
+        if(!this.usuarioSelecionado.nome || this.usuarioSelecionado.nome.trim().length == 0 )
+            erro = 'Informe um nome para o usuário';
+
+
+        if(erro.length > 0)
+        {
+            Swal.fire({
+              title: 'Atenção',
+              text: erro,
+              icon: 'warning',
+              confirmButtonText: 'OK'
+            });
+            return false;
+        }
+
+        return true;
+    }
+
+    excluiUsuario(usuario: UsuarioModel)
+    {
+      Swal.fire({
+        title: 'Atenção',
+        text: `Tem certeza de que deseja excluir o usuário ${usuario.id} ${usuario.nome} ${usuario.sobrenome}?`,
+        icon: 'question',
+        showCancelButton: true,
+        cancelButtonText: 'Não',
+        confirmButtonText: 'OK',
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          this.usuarioService.deleteUsuario(usuario.id).subscribe(
+            {
+                complete: () => {
+                },
+                next: (data) =>{
+                  this.listaTodosUsuarios();
+                  Swal.fire(
+                    'Deletado',
+                    'Usuário deletado com sucesso.',
+                    'success'
+                  )
+                },
+                error: (data) =>{
+                    let message = data.error.message ? data.error.message : data.message;
+                    console.log(data);
+    
+                  Swal.fire(
+                    'Erro ao excluir!',
+                    `Não foi possível excluir: ${message}`,
+                    'error'
+                  );
+                }
+            });
+
+          // Swal.fire(
+          //   'Deleted!',
+          //   'Your file has been deleted.',
+          //   'success'
+          // )
+        }
+      })
+    }
+
+    ExibeErroValidacao(mensagem: string)
+    {
+      Swal.fire({
+        title: 'Atenção',
+        html: mensagem,
+        icon: 'warning',
+        confirmButtonText: 'OK'
+      });
+    }
+    
 }

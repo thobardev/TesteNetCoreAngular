@@ -111,7 +111,7 @@ namespace Data.Repositories
                 usuarioDB.Email = usuario.Email;
                 usuarioDB.DataNascimento = usuario.DataNascimento;
                 usuarioDB.EscolaridadeId = usuario.EscolaridadeId;
-
+                context.Usuarios.Add(usuarioDB);
                 context.SaveChanges();
             }
             catch (Exception ex)

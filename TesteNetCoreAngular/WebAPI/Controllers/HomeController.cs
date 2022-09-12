@@ -76,7 +76,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-
+                usuarioRepository.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)
@@ -91,9 +91,9 @@ namespace WebAPI.Controllers
         [HttpPost()]
         public IActionResult Save(UsuarioModel usuario)
         {
-            ErrorModel errorModel = new ErrorModel();
             try
             {
+
                 if (usuario.Id == 0)
                     usuarioRepository.Add(usuario.ToUsuario());
                 else
@@ -107,7 +107,6 @@ namespace WebAPI.Controllers
                 error.Message = ex.Message;
                 return StatusCode(StatusCodes.Status500InternalServerError, error);
             }
-
         }
 
         [HttpGet("escolaridades/")]
